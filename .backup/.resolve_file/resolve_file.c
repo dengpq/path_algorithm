@@ -67,11 +67,6 @@ void circuit_create_nets(input_circuit_info* circuit_info,
     input_net_info** input_nets = (input_net_info**)malloc(num_of_nets * sizeof(input_net_info*));
     assert(input_nets!= NULL);
 
-    int n = 0;
-    while (n < num_of_nets) {
-        input_nets[n] = NULL;
-        ++n;
-    }
     circuit_info->m_input_nets = input_nets;
     circuit_info->m_num_of_nets = num_of_nets;
 }
@@ -80,33 +75,29 @@ void circuit_insert_net(input_circuit_info* circuit_info,
                         const int source,
                         const int sink,
                         const int delay,
-                        int net_count)
+                        int edge_count)
 {
-    if (net_count >= circuit_info->m_num_of_nets) {
-        return;
-    }
     assert(circuit_info != NULL);
 
-    input_net_info* net_info = (input_net_info*)malloc(sizeof(input_net_info));
-    assert(net_info != NULL);
+    input_net_info* edge_info = (input_net_info*)malloc(sizeof(input_net_info));
+    assert(edge_info != NULL);
+    edge_info->m_from = source;
+    edge_info->m_to = sink;
+    edge_info->m_delay = delay;
 
-    net_info->m_from = source;
-    net_info->m_to = sink;
-    net_info->m_delay = delay;
-
-    circuit_info->m_input_nets[net_count] = net_info;
-    printf("Now insert Nets[%d]=%p, source=%d,sink=%d,delay=%d\n",
-           net_count,
-           circuit_info->m_input_nets[net_count],
-           net_info->m_from,
-           net_info->m_to,
-           net_info->m_delay);
+    printf("edge_count = %d,edge_info = %p,source = %d,sink = %d,delay = %d\n",
+           edge_count,
+           edge_info,
+           edge_info->m_from,
+           edge_info->m_to,
+           edge_info->m_delay);
+    circuit_info->m_input_nets[edge_count] = edge_info;
 }
 
 void destroy_circuit_info(input_circuit_info* circuit_info)
 {
     assert(circuit_info != NULL);
-
+    /* first free m_input_pins */
     free(circuit_info->m_input_pins->m_primary_inputs);
     circuit_info->m_input_pins->m_primary_inputs = NULL;
 
@@ -117,10 +108,15 @@ void destroy_circuit_info(input_circuit_info* circuit_info)
     circuit_info->m_input_pins = NULL;
 
     /* then free m_input_edges */
+    printf("Then free all input_nets......\n");
     const int num_of_nets = circuit_info->m_num_of_nets;
     int e = 0;
     while (e < num_of_nets) {
-        printf("free input_nets[%d] = %p\n", e, circuit_info->m_input_nets[e]);
+        printf("Now free Net[%d] = %p, source: %d, sink: %d, delay: %d\n", e,
+               circuit_info->m_input_nets[e],
+               circuit_info->m_input_nets[e]->m_from,
+               circuit_info->m_input_nets[e]->m_to,
+               circuit_info->m_input_nets[e]->m_delay);
         free(circuit_info->m_input_nets[e]);
         circuit_info->m_input_nets[e] = NULL;
         ++e;
@@ -129,31 +125,30 @@ void destroy_circuit_info(input_circuit_info* circuit_info)
     free(circuit_info->m_input_nets);
     circuit_info->m_input_nets = NULL;
 }
-/* ------------------------------------------------------------- */
+
 input_circuit_info* resolve_file(const char* input_file_name)
 {
     FILE* fp = fopen(input_file_name, "r");
     input_circuit_info* circuit_info = (input_circuit_info*)malloc(sizeof(input_circuit_info));
-    int net_count = 0;
     if (fp != NULL && circuit_info != NULL) {
+        int edge_count = 0;
         while (!feof(fp)) {
             const int kmax_len = 100;
             char a_line_string[kmax_len];
             fgets(a_line_string, kmax_len, fp);
-            printf("\n\na_line_string: %s\n", a_line_string);
             /* then resolve the charactors in a_line_string */
-            bool_t find_net = resolve_a_line_string(a_line_string,
+            kbool find_net = resolve_a_line_string(a_line_string,
                                                    circuit_info,
-                                                   net_count);
+                                                   edge_count);
             if (ktrue == find_net) {
-                ++net_count;
+                ++edge_count;
             }
         }
     }
 
     int status = fclose(fp);
     if (0 == status) {
-        printf("Resolve File OK!, net_count = %d\n", net_count);
+        printf("Resolve File OK!");
     } else {
         printf("Close input file failure!");
     }
@@ -161,9 +156,9 @@ input_circuit_info* resolve_file(const char* input_file_name)
     return circuit_info;
 } /* end of resolve_file() */
 
-bool_t resolve_a_line_string(const char* a_line_string,
+kbool resolve_a_line_string(const char* a_line_string,
                             input_circuit_info* circuit_info,
-                            int net_count)
+                            int edge_count)
 {
     const int kmax_words = 65536;
     /*char** a_line_words = (char**)malloc(kmax_size * sizeof(char*));*/
@@ -172,8 +167,10 @@ bool_t resolve_a_line_string(const char* a_line_string,
     const int words = resolve_words_by_dfa(a_line_string,
                                            klen,
                                            a_line_words);
+
     /* After get all words in a a_line_string, now create input_circuit_info. */
-    bool_t find_net = kfalse;
+    kbool find_net = kfalse;
+    int num_of_nets = -1;
     if (words > 0 && strcmp(a_line_words[0], "PINS") == 0) {
         int num_of_pinss = atoi(a_line_words[1]);
         circuit_create_pins(circuit_info, num_of_pinss);
@@ -188,11 +185,10 @@ bool_t resolve_a_line_string(const char* a_line_string,
                                        num_of_primary_outputs,
                                        a_line_words);
     } else if (words > 0 && strcmp(a_line_words[0], "NETS") == 0) {
-        int num_of_nets = atoi(a_line_words[1]);
+        num_of_nets = atoi(a_line_words[1]);
         circuit_create_nets(circuit_info,
-                            num_of_nets);
-    } else if (words > 0 && strcmp(a_line_words[0], "N") == 0) { /* N */
-        find_net = ktrue;
+                             num_of_nets);
+    } else if (words > 0 && strcmp(a_line_words[0], "N") == 0 && edge_count < num_of_nets) {
         int source = atoi(a_line_words[1]);
         int sink = atoi(a_line_words[2]);
         int delay = atoi(a_line_words[3]);
@@ -200,7 +196,8 @@ bool_t resolve_a_line_string(const char* a_line_string,
                            source,
                            sink,
                            delay,
-                           net_count);
+                           edge_count);
+        find_net = ktrue;
     }
     return find_net;
 } /* end of resolve_a_line_string() */
@@ -215,7 +212,7 @@ int resolve_words_by_dfa(const char* a_line_string,
 
     int words = 0;
     int i = -1;
-    bool_t break_loop = kfalse;
+    kbool break_loop = kfalse;
     int idx = 0;
     for (i = 0; i < klen; ++i) {
         if (ktrue == break_loop) {
@@ -236,7 +233,7 @@ int resolve_words_by_dfa(const char* a_line_string,
                     state = kbegin_st;
                 }
                 break;
-
+ 
             case kaccept_st:
                 if (isdigit(c) != 0 || isalpha(c) != 0) {
                     input_str[idx++] = c; /* strcat(input_str, &c); */

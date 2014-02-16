@@ -3,7 +3,6 @@
 
 typedef struct s_vertex_t {
     char      m_name[8];
-
     /* the following 4 variables were used for PATH algo */
     double    m_required_time;
     double    m_arrival_time;

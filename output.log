@@ -1,0 +1,445 @@
+
+
+a_line_string: #Pins num_of_pins
+
+
+
+a_line_string: PINS  24
+
+
+
+a_line_string: #PI  num_of_primary_inputs serial_num1 ...
+
+
+
+a_line_string: PI           1                 0
+
+
+
+a_line_string: #PO  num_of_primary_outputs serial_num1 ...
+
+
+
+a_line_string: PO        3                     21       22      23
+
+
+
+a_line_string: #Nets  num_of_nets
+
+
+
+a_line_string: NETS      35
+
+
+
+a_line_string: #N source sink delay
+
+
+
+a_line_string: N  0  1   9
+
+Now insert Nets[0]=0x1240400, source=0,sink=1,delay=9
+
+
+a_line_string: N  0  2   5
+
+Now insert Nets[1]=0x1240420, source=0,sink=2,delay=5
+
+
+a_line_string: N  0  3   3
+
+Now insert Nets[2]=0x1240440, source=0,sink=3,delay=3
+
+
+a_line_string: N  0  4   1
+
+Now insert Nets[3]=0x1240460, source=0,sink=4,delay=1
+
+
+a_line_string: N  1  5   6
+
+Now insert Nets[4]=0x1240480, source=1,sink=5,delay=6
+
+
+a_line_string: N  2  5   2
+
+Now insert Nets[5]=0x12404a0, source=2,sink=5,delay=2
+
+
+a_line_string: N  2  6   7
+
+Now insert Nets[6]=0x12404c0, source=2,sink=6,delay=7
+
+
+a_line_string: N  3  7   1
+
+Now insert Nets[7]=0x12404e0, source=3,sink=7,delay=1
+
+
+a_line_string: N  4  8   4
+
+Now insert Nets[8]=0x1240500, source=4,sink=8,delay=4
+
+
+a_line_string: N  4  9   2
+
+Now insert Nets[9]=0x1240520, source=4,sink=9,delay=2
+
+
+a_line_string: N  5  10  11
+
+Now insert Nets[10]=0x1240540, source=5,sink=10,delay=11
+
+
+a_line_string: N  5  11  9
+
+Now insert Nets[11]=0x1240560, source=5,sink=11,delay=9
+
+
+a_line_string: N  5  12  6
+
+Now insert Nets[12]=0x1240580, source=5,sink=12,delay=6
+
+
+a_line_string: N  6  12  4
+
+Now insert Nets[13]=0x12405a0, source=6,sink=12,delay=4
+
+
+a_line_string: N  6  13  5
+
+Now insert Nets[14]=0x12405c0, source=6,sink=13,delay=5
+
+
+a_line_string: N  7  8   3
+
+Now insert Nets[15]=0x12405e0, source=7,sink=8,delay=3
+
+
+a_line_string: N  7  13  2
+
+Now insert Nets[16]=0x1240600, source=7,sink=13,delay=2
+
+
+a_line_string: N  8  13  2
+
+Now insert Nets[17]=0x1240620, source=8,sink=13,delay=2
+
+
+a_line_string: N  9  14  6
+
+Now insert Nets[18]=0x1240640, source=9,sink=14,delay=6
+
+
+a_line_string: N  10 15  3
+
+Now insert Nets[19]=0x1240660, source=10,sink=15,delay=3
+
+
+a_line_string: N  10 16  1
+
+Now insert Nets[20]=0x1240680, source=10,sink=16,delay=1
+
+
+a_line_string: N  10 17  2
+
+Now insert Nets[21]=0x12406a0, source=10,sink=17,delay=2
+
+
+a_line_string: N  11 17  4
+
+Now insert Nets[22]=0x12406c0, source=11,sink=17,delay=4
+
+
+a_line_string: N  12 18  5
+
+Now insert Nets[23]=0x12406e0, source=12,sink=18,delay=5
+
+
+a_line_string: N  13 18  11
+
+Now insert Nets[24]=0x1240700, source=13,sink=18,delay=11
+
+
+a_line_string: N  14 18  4
+
+Now insert Nets[25]=0x1240720, source=14,sink=18,delay=4
+
+
+a_line_string: N  14 23  6
+
+Now insert Nets[26]=0x1240740, source=14,sink=23,delay=6
+
+
+a_line_string: N  15 19  1
+
+Now insert Nets[27]=0x1240760, source=15,sink=19,delay=1
+
+
+a_line_string: N  16 20  2
+
+Now insert Nets[28]=0x1240780, source=16,sink=20,delay=2
+
+
+a_line_string: N  17 20  3
+
+Now insert Nets[29]=0x12407a0, source=17,sink=20,delay=3
+
+
+a_line_string: N  18 22  4
+
+Now insert Nets[30]=0x12407c0, source=18,sink=22,delay=4
+
+
+a_line_string: N  18 23  6
+
+Now insert Nets[31]=0x12407e0, source=18,sink=23,delay=6
+
+
+a_line_string: N  19 21  3
+
+Now insert Nets[32]=0x1240800, source=19,sink=21,delay=3
+
+
+a_line_string: N  20 19  4
+
+Now insert Nets[33]=0x1240820, source=20,sink=19,delay=4
+
+
+a_line_string: N  20 22  5
+
+Now insert Nets[34]=0x1240840, source=20,sink=22,delay=5
+
+
+a_line_string: N  20 22  5
+
+Resolve File OK!, net_count = 36
+resolve input circuit file OK!
+graph insert all vertexs OK!
+source = 0,sink = 1,delay = 9.000000,e = 0
+Connect edge to vertex OK!
+source = 0,sink = 2,delay = 5.000000,e = 1
+Connect edge to vertex OK!
+source = 0,sink = 3,delay = 3.000000,e = 2
+Connect edge to vertex OK!
+source = 0,sink = 4,delay = 1.000000,e = 3
+Connect edge to vertex OK!
+source = 1,sink = 5,delay = 6.000000,e = 4
+Connect edge to vertex OK!
+source = 2,sink = 5,delay = 2.000000,e = 5
+Connect edge to vertex OK!
+source = 2,sink = 6,delay = 7.000000,e = 6
+Connect edge to vertex OK!
+source = 3,sink = 7,delay = 1.000000,e = 7
+Connect edge to vertex OK!
+source = 4,sink = 8,delay = 4.000000,e = 8
+Connect edge to vertex OK!
+source = 4,sink = 9,delay = 2.000000,e = 9
+Connect edge to vertex OK!
+source = 5,sink = 10,delay = 11.000000,e = 10
+Connect edge to vertex OK!
+source = 5,sink = 11,delay = 9.000000,e = 11
+Connect edge to vertex OK!
+source = 5,sink = 12,delay = 6.000000,e = 12
+Connect edge to vertex OK!
+source = 6,sink = 12,delay = 4.000000,e = 13
+Connect edge to vertex OK!
+source = 6,sink = 13,delay = 5.000000,e = 14
+Connect edge to vertex OK!
+source = 7,sink = 8,delay = 3.000000,e = 15
+Connect edge to vertex OK!
+source = 7,sink = 13,delay = 2.000000,e = 16
+Connect edge to vertex OK!
+source = 8,sink = 13,delay = 2.000000,e = 17
+Connect edge to vertex OK!
+source = 9,sink = 14,delay = 6.000000,e = 18
+Connect edge to vertex OK!
+source = 10,sink = 15,delay = 3.000000,e = 19
+Connect edge to vertex OK!
+source = 10,sink = 16,delay = 1.000000,e = 20
+Connect edge to vertex OK!
+source = 10,sink = 17,delay = 2.000000,e = 21
+Connect edge to vertex OK!
+source = 11,sink = 17,delay = 4.000000,e = 22
+Connect edge to vertex OK!
+source = 12,sink = 18,delay = 5.000000,e = 23
+Connect edge to vertex OK!
+source = 13,sink = 18,delay = 11.000000,e = 24
+Connect edge to vertex OK!
+source = 14,sink = 18,delay = 4.000000,e = 25
+Connect edge to vertex OK!
+source = 14,sink = 23,delay = 6.000000,e = 26
+Connect edge to vertex OK!
+source = 15,sink = 19,delay = 1.000000,e = 27
+Connect edge to vertex OK!
+source = 16,sink = 20,delay = 2.000000,e = 28
+Connect edge to vertex OK!
+source = 17,sink = 20,delay = 3.000000,e = 29
+Connect edge to vertex OK!
+source = 18,sink = 22,delay = 4.000000,e = 30
+Connect edge to vertex OK!
+source = 18,sink = 23,delay = 6.000000,e = 31
+Connect edge to vertex OK!
+source = 19,sink = 21,delay = 3.000000,e = 32
+Connect edge to vertex OK!
+source = 20,sink = 19,delay = 4.000000,e = 33
+Connect edge to vertex OK!
+source = 20,sink = 22,delay = 5.000000,e = 34
+Connect edge to vertex OK!
+graph insert all edges OK!
+Create timing_analyze_graph, timing_graph = 0x1240010!
+then free circuit_info pointer...
+free input_nets[0] = 0x1240400
+free input_nets[1] = 0x1240420
+free input_nets[2] = 0x1240440
+free input_nets[3] = 0x1240460
+free input_nets[4] = 0x1240480
+free input_nets[5] = 0x12404a0
+free input_nets[6] = 0x12404c0
+free input_nets[7] = 0x12404e0
+free input_nets[8] = 0x1240500
+free input_nets[9] = 0x1240520
+free input_nets[10] = 0x1240540
+free input_nets[11] = 0x1240560
+free input_nets[12] = 0x1240580
+free input_nets[13] = 0x12405a0
+free input_nets[14] = 0x12405c0
+free input_nets[15] = 0x12405e0
+free input_nets[16] = 0x1240600
+free input_nets[17] = 0x1240620
+free input_nets[18] = 0x1240640
+free input_nets[19] = 0x1240660
+free input_nets[20] = 0x1240680
+free input_nets[21] = 0x12406a0
+free input_nets[22] = 0x12406c0
+free input_nets[23] = 0x12406e0
+free input_nets[24] = 0x1240700
+free input_nets[25] = 0x1240720
+free input_nets[26] = 0x1240740
+free input_nets[27] = 0x1240760
+free input_nets[28] = 0x1240780
+free input_nets[29] = 0x12407a0
+free input_nets[30] = 0x12407c0
+free input_nets[31] = 0x12407e0
+free input_nets[32] = 0x1240800
+free input_nets[33] = 0x1240820
+free input_nets[34] = 0x1240840
+free circuit_info OK!
+
+initial all vertexs' front and behind value OK!, then calculate all vertexs' arrival_time, max_delay.
+zero_indegree = 0x1240840, topo_sort = 0x1240680
+Enter in calc_all_vertexs_arrival_time()...
+num_of_primary_inputs = 1
+
+current vertex: v0
+v1 push into zero_indegree
+  v0->v1: v1 arrival_time = 9.000000
+v2 push into zero_indegree
+  v0->v2: v2 arrival_time = 5.000000
+v3 push into zero_indegree
+  v0->v3: v3 arrival_time = 3.000000
+v4 push into zero_indegree
+  v0->v4: v4 arrival_time = 1.000000
+
+current vertex: v4
+  v4->v8: v8 arrival_time = 5.000000
+v9 push into zero_indegree
+  v4->v9: v9 arrival_time = 3.000000
+
+current vertex: v9
+v14 push into zero_indegree
+  v9->v14: v14 arrival_time = 9.000000
+
+current vertex: v14
+  v14->v18: v18 arrival_time = 13.000000
+  v14->v23: v23 arrival_time = 15.000000
+
+current vertex: v3
+v7 push into zero_indegree
+  v3->v7: v7 arrival_time = 4.000000
+
+current vertex: v7
+v8 push into zero_indegree
+  v7->v8: v8 arrival_time = 7.000000
+  v7->v13: v13 arrival_time = 6.000000
+
+current vertex: v8
+  v8->v13: v13 arrival_time = 9.000000
+
+current vertex: v2
+  v2->v5: v5 arrival_time = 7.000000
+v6 push into zero_indegree
+  v2->v6: v6 arrival_time = 12.000000
+
+current vertex: v6
+  v6->v12: v12 arrival_time = 16.000000
+v13 push into zero_indegree
+  v6->v13: v13 arrival_time = 17.000000
+
+current vertex: v13
+  v13->v18: v18 arrival_time = 28.000000
+
+current vertex: v1
+v5 push into zero_indegree
+  v1->v5: v5 arrival_time = 15.000000
+
+current vertex: v5
+v10 push into zero_indegree
+  v5->v10: v10 arrival_time = 26.000000
+v11 push into zero_indegree
+  v5->v11: v11 arrival_time = 24.000000
+v12 push into zero_indegree
+  v5->v12: v12 arrival_time = 21.000000
+
+current vertex: v12
+v18 push into zero_indegree
+
+current vertex: v18
+  v18->v22: v22 arrival_time = 32.000000
+v23 push into zero_indegree
+  v18->v23: v23 arrival_time = 34.000000
+
+current vertex: v23
+
+current vertex: v11
+  v11->v17: v17 arrival_time = 28.000000
+
+current vertex: v10
+v15 push into zero_indegree
+  v10->v15: v15 arrival_time = 29.000000
+v16 push into zero_indegree
+  v10->v16: v16 arrival_time = 27.000000
+v17 push into zero_indegree
+
+current vertex: v17
+  v17->v20: v20 arrival_time = 31.000000
+
+current vertex: v16
+v20 push into zero_indegree
+
+current vertex: v20
+  v20->v19: v19 arrival_time = 35.000000
+v22 push into zero_indegree
+  v20->v22: v22 arrival_time = 36.000000
+
+current vertex: v22
+
+current vertex: v15
+v19 push into zero_indegree
+
+current vertex: v19
+v21 push into zero_indegree
+  v19->v21: v21 arrival_time = 38.000000
+
+current vertex: v21
+vertex_count = 24
+calculate all vertexs' s arrival_time OK! kmax_delay = 38.000000
+calculate all vertexs' critical_path_through_pin OK!
+calculate all vertexs' required_time OK!
+calculate all vertexs' behind_crit_path_through_pin OK!
+calculate all edges's local_crit_path_through_edge OK!
+free 2 stacks OK!
+Run actual PATH algorithm OK! Then write all net weights...
+Print all nets' weight OK!, then free timing_graph pointer...
+Last, don't forget free timing_graph......
+free timing_graph OK! PATH algorithm finished!

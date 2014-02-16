@@ -1,0 +1,63 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+RESOLVE_FILE_H	resolve_file.h	2;"	d
+circuit_create_edges	resolve_file.c	/^void circuit_create_edges(input_circuit_info* circuit_info,$/;"	f	signature:(input_circuit_info* circuit_info, const int num_of_nets)
+circuit_create_edges	resolve_file.h	/^void circuit_create_edges(input_circuit_info* circuit_info,$/;"	p	signature:(input_circuit_info* circuit_info, const int num_of_edges)
+circuit_create_pins	resolve_file.c	/^void circuit_create_pins(input_circuit_info* circuit_info,$/;"	f	signature:(input_circuit_info* circuit_info, const int num_of_pins)
+circuit_create_pins	resolve_file.h	/^void circuit_create_pins(input_circuit_info* circuit_info,$/;"	p	signature:(input_circuit_info* circuit_info, const int num_of_vertexs)
+circuit_create_primary_inputs	resolve_file.c	/^void circuit_create_primary_inputs(input_circuit_info* circuit_info,$/;"	f	signature:(input_circuit_info* circuit_info, const int num_of_primary_inputs, char a_line_words[][8])
+circuit_create_primary_inputs	resolve_file.h	/^void circuit_create_primary_inputs(input_circuit_info* circuit_info,$/;"	p	signature:(input_circuit_info* circuit_info, const int num_of_primary_inputs, char a_line_words[][8])
+circuit_create_primary_outputs	resolve_file.c	/^void circuit_create_primary_outputs(input_circuit_info* circuit_info,$/;"	f	signature:(input_circuit_info* circuit_info, const int num_of_primary_outputs, char a_line_words[][8])
+circuit_create_primary_outputs	resolve_file.h	/^void circuit_create_primary_outputs(input_circuit_info* circuit_info,$/;"	p	signature:(input_circuit_info* circuit_info, const int num_of_primary_outputs, char a_line_words[][8])
+circuit_insert_edge	resolve_file.c	/^void circuit_insert_edge(input_circuit_info* circuit_info,$/;"	f	signature:(input_circuit_info* circuit_info, const int source, const int sink, const int delay, int edge_count)
+circuit_insert_edge	resolve_file.h	/^void circuit_insert_edge(input_circuit_info* circuit_info,$/;"	p	signature:(input_circuit_info* circuit_info, const int source, const int sink, const int delay, int edge_count)
+destroy_circuit_info	resolve_file.c	/^void destroy_circuit_info(input_circuit_info* circuit_info)$/;"	f	signature:(input_circuit_info* circuit_info)
+destroy_circuit_info	resolve_file.h	/^void destroy_circuit_info(input_circuit_info* circuit_info);$/;"	p	signature:(input_circuit_info* circuit_info)
+e_state_t	resolve_file.h	/^typedef enum e_state_t {$/;"	g
+input_circuit_info	resolve_file.h	/^} input_circuit_info;$/;"	t	typeref:struct:s_circuit_info
+input_net_info	resolve_file.h	/^} input_net_info;$/;"	t	typeref:struct:s_edge_info
+input_pin_info	resolve_file.h	/^} input_pin_info;$/;"	t	typeref:struct:s_pin_info
+kaccept_st	resolve_file.h	/^    kaccept_st,$/;"	e	enum:e_state_t
+kbegin_st	resolve_file.h	/^    kbegin_st = 1,$/;"	e	enum:e_state_t
+kbool	resolve_file.h	/^} kbool;$/;"	t	typeref:enum:__anon1
+kfalse	resolve_file.h	/^    kfalse = 0,$/;"	e	enum:__anon1
+kfinish_st	resolve_file.h	/^    kfinish_st$/;"	e	enum:e_state_t
+ktrue	resolve_file.h	/^    ktrue $/;"	e	enum:__anon1
+m_delay	resolve_file.h	/^    int m_delay;$/;"	m	struct:s_edge_info	access:public
+m_from	resolve_file.h	/^    int m_from; \/* source vertex *\/$/;"	m	struct:s_edge_info	access:public
+m_input_nets	resolve_file.h	/^    input_net_info**  m_input_nets;$/;"	m	struct:s_circuit_info	access:public
+m_input_pins	resolve_file.h	/^    input_pin_info*   m_input_pins;$/;"	m	struct:s_circuit_info	access:public
+m_num_of_nets	resolve_file.h	/^    int               m_num_of_nets;$/;"	m	struct:s_circuit_info	access:public
+m_num_of_pins	resolve_file.h	/^    int  m_num_of_pins;$/;"	m	struct:s_pin_info	access:public
+m_num_of_primary_inputs	resolve_file.h	/^    int  m_num_of_primary_inputs;$/;"	m	struct:s_pin_info	access:public
+m_num_of_primary_outputs	resolve_file.h	/^    int  m_num_of_primary_outputs;$/;"	m	struct:s_pin_info	access:public
+m_primary_inputs	resolve_file.h	/^    int* m_primary_inputs;$/;"	m	struct:s_pin_info	access:public
+m_primary_outputs	resolve_file.h	/^    int* m_primary_outputs;$/;"	m	struct:s_pin_info	access:public
+m_to	resolve_file.h	/^    int m_to;   \/* sink vertex *\/$/;"	m	struct:s_edge_info	access:public
+main	main.c	/^int main(int argc, char* argv[])$/;"	f	signature:(int argc, char* argv[])
+main	test.c	/^int main(int argc, char* argv[])$/;"	f	signature:(int argc, char* argv[])
+resolve_a_line_string	resolve_file.c	/^kbool resolve_a_line_string(const char* a_line_string,$/;"	f	signature:(const char* a_line_string, input_circuit_info* circuit_info, int edge_count)
+resolve_a_line_string	resolve_file.h	/^kbool resolve_a_line_string(const char* line,$/;"	p	signature:(const char* line, input_circuit_info* circuit_info, int edge_count)
+resolve_file	resolve_file.c	/^input_circuit_info* resolve_file(const char* input_file_name)$/;"	f	signature:(const char* input_file_name)
+resolve_file	resolve_file.h	/^input_circuit_info* resolve_file(const char* input_file_name);$/;"	p	signature:(const char* input_file_name)
+resolve_words_by_dfa	resolve_file.c	/^int resolve_words_by_dfa(const char* a_line_string,$/;"	f	signature:(const char* a_line_string, const int klen, char a_line_words[][8])
+resolve_words_by_dfa	resolve_file.h	/^int resolve_words_by_dfa(const char* line,$/;"	p	signature:(const char* line, const int klen, char a_line_words[][8])
+s_circuit_info	resolve_file.h	/^typedef struct s_circuit_info {$/;"	s
+s_circuit_info::m_input_nets	resolve_file.h	/^    input_net_info**  m_input_nets;$/;"	m	struct:s_circuit_info	access:public
+s_circuit_info::m_input_pins	resolve_file.h	/^    input_pin_info*   m_input_pins;$/;"	m	struct:s_circuit_info	access:public
+s_circuit_info::m_num_of_nets	resolve_file.h	/^    int               m_num_of_nets;$/;"	m	struct:s_circuit_info	access:public
+s_edge_info	resolve_file.h	/^typedef struct s_edge_info {$/;"	s
+s_edge_info::m_delay	resolve_file.h	/^    int m_delay;$/;"	m	struct:s_edge_info	access:public
+s_edge_info::m_from	resolve_file.h	/^    int m_from; \/* source vertex *\/$/;"	m	struct:s_edge_info	access:public
+s_edge_info::m_to	resolve_file.h	/^    int m_to;   \/* sink vertex *\/$/;"	m	struct:s_edge_info	access:public
+s_pin_info	resolve_file.h	/^typedef struct s_pin_info {$/;"	s
+s_pin_info::m_num_of_pins	resolve_file.h	/^    int  m_num_of_pins;$/;"	m	struct:s_pin_info	access:public
+s_pin_info::m_num_of_primary_inputs	resolve_file.h	/^    int  m_num_of_primary_inputs;$/;"	m	struct:s_pin_info	access:public
+s_pin_info::m_num_of_primary_outputs	resolve_file.h	/^    int  m_num_of_primary_outputs;$/;"	m	struct:s_pin_info	access:public
+s_pin_info::m_primary_inputs	resolve_file.h	/^    int* m_primary_inputs;$/;"	m	struct:s_pin_info	access:public
+s_pin_info::m_primary_outputs	resolve_file.h	/^    int* m_primary_outputs;$/;"	m	struct:s_pin_info	access:public
+state_t	resolve_file.h	/^} state_t;$/;"	t	typeref:enum:e_state_t

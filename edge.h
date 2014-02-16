@@ -4,9 +4,8 @@
 struct vertex_t;
 
 typedef struct s_edge_t {
-    char      m_name[8];
+    char      m_name[16];
     double    m_delay;
-
     /* the following 3 variable was used for PATH algo */
     double    m_forward_local_slack; /* forward_local_slack(i,j) = Tarrival(j) - Tarrival(i) - delay(i,j)*/
     double    m_backward_local_slack; /* backward_local_slack(i,j) = Trequired(j) - Trequired(i) - delay(i,j)*/

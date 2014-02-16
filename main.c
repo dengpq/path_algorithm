@@ -30,12 +30,14 @@ int main(int argc, char* argv[])
         printf("then free circuit_info pointer...\n");
         destroy_circuit_info(circuit_info);
         printf("free circuit_info OK!\n\n");
+
         /* third find all critical path in DAG, especially the edges that shared *
          * by many critical path. */
         run_path_algorithm(timing_graph);
-#ifdef DEBUG
-        printf("Run actual PATH algorithm OK! Then write the result to circuit_output_file.\n");
-#endif
+        printf("Run actual PATH algorithm OK! Then write all net weights...\n");
+
+        print_all_nets_weight(timing_graph);
+        printf("Print all nets' weight OK!, then free timing_graph pointer...\n");
         /* last, write the result to output file */
         return_val = 1;
 #ifdef DEBUG

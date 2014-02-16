@@ -1,0 +1,37 @@
+TOP = ..
+
+CC = gcc
+DEBUG_FLAGS = -g -DDEBUG
+OPT_FLAGS = -fPIC -O3
+
+FLAGS = $(DEBUG_FLAGS) $(OPT_FLAGS)
+LFLAGS = $(FLAGS) -lm
+
+EXE = path
+
+#source files are all c or cpp files in current directory
+SRC = $(wildcard *.c)
+MAIN_SRC = main.c
+
+Header = resolve_file.h stack.h vertex.h edge.h graph.h path.h
+
+OBJ_PATH = $(TOP)/obj/
+
+#in OBJS file, it didn't had test_h.o and graphics.o, it should compile seperately
+#OBJS = resolve_file.o stack.o graph.o path.o main.o
+OBJS = $(SRC:%.c=$(OBJ_PATH)*.o)
+
+MK_DIR = if [ ! -d $(@D) ]; then mkdir $(@D); fi
+#link all needed object files to binary file.
+#FIXME: the statement must define at all object files, graphics.o and test_h.o,
+#otherwise, it will not compile all the needed object files.
+
+#then I should set most object files. Attention, I should use %.o, %.c, not *.o, *.c.
+$(OBJS) : $(SRC)
+	@$(MK_DIR)
+	$(CC) $(FLAGS) -c -o $@ $<
+
+$(EXE):$(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o $(EXE)
+clean:
+	rm $(OBJS) $(EXE)

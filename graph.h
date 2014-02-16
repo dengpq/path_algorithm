@@ -21,10 +21,17 @@ timing_analyze_graph* create_timing_analyze_graph(const input_circuit_info* circ
 void graph_insert_vertexs(const input_circuit_info* circuit_info,
                           timing_analyze_graph* graph);
 
+void graph_set_vertex_name(vertex_t* vertex,
+                           const int serial_num);
+
 void graph_insert_edge(const int source,
                        const int sink,
                        const double delay,
                        timing_analyze_graph* graph);
+
+void graph_set_edge_name(edge_t* edge,
+                         const vertex_t* source,
+                         const vertex_t* sink);
 
 void graph_connect_edge_to_vertex(vertex_t* source,
                                   vertex_t* sink,
