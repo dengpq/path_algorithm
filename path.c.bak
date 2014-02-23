@@ -11,27 +11,25 @@
 void run_path_algorithm(const timing_analyze_graph* graph,
                         const char* algo_type)
 {
-    /* First initialize all vertexs' front_crit_path_through_pin and *
-     * behind_crit_path_through_pin.                                 */
-    printf("Enter in run_path_algorithm(),algo_type:%s, first initial all vertexs' value...\n",
-           algo_type);
+    /* First initialize all vertexs' front_crit_path_through_pin *
+     * and behind_crit_path_through_pin.                         */
+    printf("Enter in run_path_algorithm(), algo_type: %s, first initial all vertexs' value...\n", algo_type);
     init_all_vertexs_value(graph);
 
-    /* Second calculate all vertexs' arrival_time, max_delay and return the *
-     * number of vertexs that find by topo_sorting or breath-first search.  */
+    /* Second calculate all vertexs' arrival_time, max_delay and return the   *
+     * number of vertexs that find by topo sorting or breath-first search.    */
     stack_t* zero_indegree = create_stack();
     stack_t* topo_sort = create_stack();
 
-    queue_t* queue = create_queue();
-    vertex_level_t** netlist_level = (vertex_level_t**)malloc(gmax_size * sizeof(vertex_level_t*));
-    int  num_of_levels = 0;
+    queue_t*   queue = create_queue();
+    vertex_t** visited_vertexs = (vertex_t**)malloc(graph->m_num_of_vertexs * sizeof(vertex_t*));
     assert(zero_indegree != NULL && topo_sort != NULL && queue != NULL
-             && netlist_level!=NULL);
+             && visited_vertexs != NULL);
 
     double max_delay = 0.0;
-    int    count = 0;
+    int count = 0;
     if (strcmp(algo_type, "topo_sort") == 0) {
-        printf("Use topo_sorting to calculate all vertexs' arrival_time...\n");
+        printf("Use topo sorting to calculate all vertexs' arrival_time...\n");
         count = calc_all_vertexs_arrival_time(graph,
                                               zero_indegree,
                                               topo_sort,
@@ -40,26 +38,23 @@ void run_path_algorithm(const timing_analyze_graph* graph,
         printf("Use breath-first searching to calculate all vertexs' arrival_time...\n");
         count = calc_all_vertexs_arrival_time_by_bfs(graph,
                                                      queue,
-                                                     netlist_level,
-                                                     &num_of_levels,
+                                                     visited_vertexs,
                                                      &max_delay);
     }
-    printf("Calculate all vertexs' arr_time OK!max_delay = %f,count = %d,num_of_levels = %d\n",
-           max_delay,
-           count,
-           num_of_levels);
-    /* In this circumstance, there must be circle in graph */
+    printf("calculate all vertexs' s arrival_time OK! max_delay = %f\n",
+           max_delay);
+    /* in this circumstance, there must be circle in graph */
     if (count < graph->m_num_of_vertexs) {
-        exit(1);
+         exit(1);
     }
 
-    /* Third, calculate all vertexs' front_crit_path_through_pin */
+    /* third calculate all vertexs' front_crit_path_through_pin */
     calc_front_crit_path_through_pin(graph,
                                      max_delay);
     printf("calculate all vertexs' critical_path_through_pin OK!\n");
-    /* Forth, use reverse top-sorting to compute all vertexs' required_time, *
-     * slack and behind_crit_path_through_pin.                               */
-    if (strcmp(algo_type,"topo_sort") == 0) {
+    /* forth, use reverse top-sort to compute all vertexs' required_time, slack *
+     * behind_crit_path_through_pin.                                            */
+    if (strcmp(algo_type, "topo_sort") == 0) {
         printf("Use topo-sorting to calculate all vertexs' required_time...\n");
         calc_all_vertexs_required_time(graph,
                                        max_delay,
@@ -68,28 +63,27 @@ void run_path_algorithm(const timing_analyze_graph* graph,
         printf("Use breath-first searching to calculate all vertexs' required_time...\n");
         calc_all_vertexs_required_time_by_bfs(graph,
                                               max_delay,
-                                              num_of_levels,
-                                              netlist_level);
+                                              visited_vertexs);
     }
-    printf("Calculate all vertexs' required_time OK!\n");
-    /* Fifth, calculate all vertexs' behind_crit_path_through_pin */
+    printf("calculate all vertexs' required_time OK!\n");
+    /* fifth, calculate all vertexs' behind_crit_path_through_pin */
     calc_behind_crit_path_through_pin(graph,
                                       max_delay);
-    printf("Calculate all vertexs' behind_crit_path_through_pin OK!\n");
-    /* Last, calculate all edge's local_crit_path_through_edge(weight). */
+    printf("calculate all vertexs' behind_crit_path_through_pin OK!\n");
+    /* last, calculate all edge's local_crit_path_through_edge(weight). */
     calc_local_crit_path_through_edge(graph,
                                       max_delay);
-    printf("Calculate all edges' local_crit_path_through_edge OK!\n");
+    printf("calculate all edges's local_crit_path_through_edge OK!\n");
 
     /* Don't forget free the 2 stacks */
     destroy_stack(zero_indegree);
     destroy_stack(topo_sort);
 
     destroy_queue(queue);
-    destroy_netlist_level(netlist_level,
-                          num_of_levels);
-    printf("Free 2 stacks, queue and netlist_level OK!\n");
-} /* end of void run_path_algorithm() */
+    free(visited_vertexs);
+    visited_vertexs = NULL;
+    printf("free 2 stacks, queue and visited_vertexs OK!\n");
+}
 
 void init_all_vertexs_value(const timing_analyze_graph* graph)
 {
@@ -109,11 +103,12 @@ void init_all_vertexs_value(const timing_analyze_graph* graph)
     }
 } /* end of void init_all_vertexs_value(graph) */
 
-int calc_all_vertexs_arrival_time(const timing_analyze_graph* graph,
-                                  stack_t* zero_indegree,
-                                  stack_t* topo_sort,
-                                  double*  kmax_delay)
+int  calc_all_vertexs_arrival_time(const timing_analyze_graph* graph,
+                                   stack_t* zero_indegree,
+                                   stack_t* topo_sort,
+                                   double* kmax_delay)
 {
+    printf("Enter in calc_all_vertexs_arrival_time()...\n");
     const int num_of_primary_inputs = graph->m_num_of_primary_inputs;
     int v = -1;
     for (v = 0; v < num_of_primary_inputs; ++v) {
@@ -126,100 +121,93 @@ int calc_all_vertexs_arrival_time(const timing_analyze_graph* graph,
     int count = 0;
     while (kfalse == stack_is_empty(zero_indegree)) {
         vertex_t* top_elem = stack_pop(zero_indegree);
-        stack_push(topo_sort,
-                   top_elem);
+        printf("\ncurrent vertex: %s\n", top_elem->m_name);
+        stack_push(topo_sort, top_elem);
         ++count;
 
-        /* Then calculate all vertexs' arrival_time and max_delay */
+        /* then calculate all vertexs' arrival_time, kmax_delay */
         edge_t* e = top_elem->m_first_edge;
         while (e != NULL) {
             vertex_t* tail = e->m_sink;
             if (--(tail->m_indegree) == 0) {
-                stack_push(zero_indegree,
-                           tail);
+                stack_push(zero_indegree, tail);
+                printf("%s push into zero_indegree\n", tail->m_name);
             }
 
             if (top_elem->m_arrival_time + e->m_delay > tail->m_arrival_time) {
                 tail->m_arrival_time = top_elem->m_arrival_time + e->m_delay;
-                if (tail->m_arrival_time>*kmax_delay) {
-                    *kmax_delay=tail->m_arrival_time;
+                printf("  %s: %s arrival_time = %f\n",
+                       e->m_name,
+                       tail->m_name,
+                       tail->m_arrival_time);
+                if (tail->m_arrival_time > *kmax_delay) {
+                    *kmax_delay = tail->m_arrival_time;
                 }
             }
             e = e->m_next;
         } /* end of while(e != NULL) */
     } /* end of while(kfalse == stack_is_empty(zero_indegree)) */
+
+    printf("vertex_count = %d\n", count);
     return count;
-} /* end of int calc_all_vertexs_arrival_time(graph, zero_indegree...) */
+} /* end of int calc_all_vertexs_arrival_time(graph, zero_indegree...)*/
 
 int  calc_all_vertexs_arrival_time_by_bfs(const timing_analyze_graph* graph,
-                                          queue_t*  queue,
-                                          vertex_level_t**  netlist_level,
-                                          int*  num_of_levels,
-                                          double*  max_delay)
+                                          queue_t* queue,
+                                          vertex_t** visited_vertexs,
+                                          double* max_delay)
 {
-    assert(graph != NULL && queue != NULL && netlist_level != NULL);
+    assert(graph != NULL && queue != NULL && visited_vertexs != NULL);
 
-    int count = 0;
     const int num_of_primary_inputs = graph->m_num_of_primary_inputs;
-    vertex_level_t* pri_input_level = init_a_vertex_level(graph->m_primary_inputs,
-                                                          num_of_primary_inputs,
-                                                          *num_of_levels);
+    vertex_level_t* pri_input_level = init_a_vertex_level(num_of_primary_inputs,
+                                                          0);
+    int count = 0;
     int v = -1;
     for (v = 0; v < num_of_primary_inputs; ++v) {
+        vertex_t* primary_input = graph->m_primary_inputs[v];
         queue_push(queue,
-                   graph->m_primary_inputs[v]);
-    }
-    /* Do not for get assign primary_vertex_level to netlist_level */
-    netlist_level[(*num_of_levels)++] = pri_input_level;
+                   primary_input);
+        primary_input->m_visited = ktrue;
+        visited_vertexs[count++] = primary_input;
 
-    int vertexs_in_cur_level = num_of_primary_inputs;
-    int visited_in_cur_level = 0;
-    vertex_t*  visited_vertexs_in_next_level[gmax_size];
-    int visited_in_next_level = 0;
+        pri_input_level->m_vertexs[v] = primary_input;
+    }
 
     while (kfalse == queue_is_empty(queue)) {
         vertex_t* source = queue_pop(queue);
-        ++count;
-
         edge_t* edge = NULL;
         for (edge = source->m_first_edge; edge != NULL; edge = edge->m_next) {
+            printf("    Source: %s, Edge: %s\n", source->m_name, edge->m_name);
             vertex_t* sink = edge->m_sink;
-            const int loc = array_find_element(visited_vertexs_in_next_level,
-                                               visited_in_next_level,
-                                               sink);
-            if (loc == visited_in_next_level) {
-                visited_vertexs_in_next_level[visited_in_next_level++] = sink;
+            vertex_t* loc = bsearch(sink,
+                                     (void*)queue,
+                                     num_of_vertexs,
+                                     sizeof(vertex_t*),
+                                     compare_pointer);
+            if (loc == NULL) {
+                /* In current time, sink wasn't in queue. So push_back sink into queue. */
+                queue_push(queue,
+                           sink);
             }
-
+            if (kfalse == sink->m_visited) {
+                sink->m_visited = ktrue;
+                visited_vertexs[count++] = sink;
+            }
             if (source->m_arrival_time + edge->m_delay > sink->m_arrival_time) {
                 sink->m_arrival_time = source->m_arrival_time + edge->m_delay;
+                printf("      %s arr_time: %f\n\n",
+                       sink->m_name,
+                       sink->m_arrival_time);
                 if (sink->m_arrival_time > *max_delay) {
                     *max_delay = sink->m_arrival_time;
+                    printf("        max_delay = %f\n", *max_delay);
                 }
             }
-        } /* end of for(edge = source->m_first_edge; edge != NULL; edge = edge->m_next) */
-
-        ++visited_in_cur_level;
-        if (visited_in_next_level != 0
-              && visited_in_cur_level == vertexs_in_cur_level) {
-            /* All vertexs in current level had visisted. Now initial next *
-             * vertex_level_t.                                             */
-            vertex_level_t* next_level = init_a_vertex_level(visited_vertexs_in_next_level,
-                                                             visited_in_next_level,
-                                                             *num_of_levels);
-            netlist_level[*num_of_levels] = next_level;
-            ++(*num_of_levels);
-            /* then set vertexs in next_level... */
-            for (v = 0; v < visited_in_next_level; ++v) {
-                queue_push(queue,
-                           visited_vertexs_in_next_level[v]);
-            }
-            visited_in_cur_level = visited_in_next_level = 0;
-            vertexs_in_cur_level = queue_size(queue);
-        } /* end of if(visited_in_next_level != 0 && ...) */
-    } /* end of while(kfalse==queue_is_empty(queue)) */
+        } /* end of for(edge = source->m_first_edge;edge != NULL;edge = edge->m_next)*/
+    } /* end of while (kfalse == queue_is_empty(queue)) */
     return count;
-} /* end of int calc_all_vertexs_required_time_by_bfs() */
+}
 
 void calc_front_crit_path_through_pin(const timing_analyze_graph* graph,
                                       const double kmax_delay)
@@ -228,73 +216,70 @@ void calc_front_crit_path_through_pin(const timing_analyze_graph* graph,
     int v = -1;
     for (v = 0; v < num_of_vertexs; ++v) {
         vertex_t* source = graph->m_vertexs[v];
-        edge_t*   e = source->m_first_edge;
+        edge_t* e = source->m_first_edge;
         while (e != NULL) {
             vertex_t* tail = e->m_sink;
             /* forward_local_slack(i,j) = arrival_time(j) - arrival_time(i) - delay(i,j) */
             e->m_forward_local_slack = tail->m_arrival_time - source->m_arrival_time
-                                        - e->m_delay;
+                                         - e->m_delay;
             double forward_value = compute_discount_value(e->m_forward_local_slack,
                                                           kmax_delay);
             tail->m_front_crit_path_through_pin += forward_value
-                                                     * source->m_front_crit_path_through_pin;
+                                                      * source->m_front_crit_path_through_pin;
             e = e->m_next;
-        } /* end of while (e != NULL) */
-    } /* end of for(v = 0; v < num_of_vertexs; ++v) */
-} /* end of void calc_front_crit_path_through_pin() */
+        }
+    }
+}
 
 void calc_all_vertexs_required_time(const timing_analyze_graph* graph,
                                     const double kmax_delay,
                                     stack_t* topo_sort)
 {
-    /* 1.initialallvertexs'required_timeaskmax_delay */
+    /* 1.initial all vertexs' required_time as kmax_delay */
     int v = 0;
     while (v < graph->m_num_of_vertexs) {
         graph->m_vertexs[v]->m_required_time = kmax_delay;
         ++v;
     }
-    /* 2.calculateallvertexs'srequired_time,slackandbehind_crit_path_through_pin */
+    /* 2.calculate all vertexs's required_time, slack and behind_crit_path_through_pin */
     while (kfalse == stack_is_empty(topo_sort)) {
         vertex_t* top_elem = stack_pop(topo_sort);
-        edge_t*  e = top_elem->m_first_edge;
+        edge_t* e = top_elem->m_first_edge;
         while (e != NULL) {
             vertex_t* tail = e->m_sink;
             if (tail->m_required_time - e->m_delay < top_elem->m_required_time) {
                 top_elem->m_required_time = tail->m_required_time - e->m_delay;
             }
             e = e->m_next;
-        } /* end of while(e != NULL) */
-    } /* end of while(stack_is_empty(topo_sort)==kfalse) */
+        }
+    } /* end of while(stack_is_empty(topo_sort) == kfalse) */
 } /* end of void calc_all_vertexs_required_time(graph,...) */
 
 void calc_all_vertexs_required_time_by_bfs(const timing_analyze_graph* graph,
-                                           const double  kmax_delay,
-                                           const int  knum_of_levels,
-                                           vertex_level_t** netlist_level)
+                                           const double kmax_delay,
+                                           vertex_t** visited_vertexs)
 {
-    int num_of_vertexs = graph->m_num_of_vertexs;
+    const int num_of_vertexs = graph->m_num_of_vertexs;
     int v = -1;
     for (v = 0; v < num_of_vertexs; ++v) {
         graph->m_vertexs[v]->m_required_time = kmax_delay;
     }
 
-    int l = -1;
-    for (l = knum_of_levels - 1; l >= 0; --l) {
-        vertex_level_t* vertex_level = netlist_level[l];
-        num_of_vertexs = vertex_level->m_num_of_vertexs;
-
-        for (v = 0; v < num_of_vertexs; ++v) {
-            vertex_t* source = vertex_level->m_vertexs[v];
-            edge_t*   e = NULL;
-            for (e = source->m_first_edge; e != NULL; e = e->m_next) {
-                vertex_t*  sink = e->m_sink;
-                if (sink->m_required_time - e->m_delay < source->m_required_time) {
-                    source->m_required_time = sink->m_required_time - e->m_delay;
-                }
+    for (v = num_of_vertexs - 1; v >= 0; --v) {
+        vertex_t* source = visited_vertexs[v];
+        edge_t* e = NULL;
+        for (e = source->m_first_edge; e != NULL; e = e->m_next) {
+            vertex_t* tail = e->m_sink;
+            printf("        For Edge: %s\n", e->m_name);
+            if (tail->m_required_time - e->m_delay < source->m_required_time) {
+                source->m_required_time = tail->m_required_time - e->m_delay;
             }
-        } /* end of for (v = 0; v < num_of_vertexs; ++v) */
-    } /* end of for(l = knum_of_levels-1; l >= 0; --l) */
-} /* end of void calc_all_vertexs_required_time_by_bfs() */
+        }
+        printf("    %s req_time: %f\n",
+               source->m_name,
+               source->m_required_time);
+    }
+}
 
 void calc_behind_crit_path_through_pin(const timing_analyze_graph* graph,
                                        const double kmax_delay)
@@ -303,7 +288,7 @@ void calc_behind_crit_path_through_pin(const timing_analyze_graph* graph,
     int v = -1;
     for (v = 0; v < num_of_vertexs; ++v) {
         vertex_t* source = graph->m_vertexs[v];
-        edge_t*   e = source->m_first_edge;
+        edge_t* e = source->m_first_edge;
         while (e != NULL) {
             vertex_t* tail = e->m_sink;
             /* slack(i,j) = required_time(j) - arrival_time(i) - delay(i,j) */
@@ -315,8 +300,8 @@ void calc_behind_crit_path_through_pin(const timing_analyze_graph* graph,
             source->m_behind_crit_path_through_pin += backward_value
                                                         * tail->m_behind_crit_path_through_pin;
             e = e->m_next;
-        } /* end of while(e != NULL) */
-    } /* end of for(v = 0; v < num_of_vertexs; ++v) */
+        }
+    }
 } /* end of void calc_behind_crit_path_through_pin() */
 
 void calc_local_crit_path_through_edge(const timing_analyze_graph* graph,
@@ -329,16 +314,16 @@ void calc_local_crit_path_through_edge(const timing_analyze_graph* graph,
         while (e != NULL) {
             const vertex_t* source = e->m_source;
             const vertex_t* tail = e->m_sink;
-
             const double front_crit_path_through_pin = source->m_front_crit_path_through_pin;
             const double behind_crit_path_through_pin = tail->m_behind_crit_path_through_pin;
+
             const double slack = e->m_slack;
             const double discount_value = compute_discount_value(slack,
                                                                  kmax_delay);
 
-            e->m_local_crit_path_through_edge = front_crit_path_through_pin
+            e->m_local_crit_path_through_edge = (front_crit_path_through_pin
                                                   * behind_crit_path_through_pin
-                                                  * discount_value;
+                                                  * discount_value);
 
             e = e->m_next; /* then, calculate next edge */
         } /* end of while(e != NULL) */
@@ -346,42 +331,39 @@ void calc_local_crit_path_through_edge(const timing_analyze_graph* graph,
     } /* end of while(v < num_of_vertexs) */
 } /* end of void calc_local_crit_path_through_edge(graph) */
 
-double compute_discount_value(const double x,
-                              const double y)
+double compute_discount_value(const double x, const double y)
 {
-    return exp(-x / y); /* e^(-x/y) */
+    return exp(-x / y);
 }
 
-/*void find_all_crit_paths_in_graph(const timing_analyze_graph* graph)
+/* void find_all_crit_paths_in_graph(const timing_analyze_graph* graph)
 {
-}*/
+} */
 
 void print_all_nets_weight(const timing_analyze_graph* graph)
 {
     FILE* output_file = fopen("print_all_nets_weight.log", "w");
-    char  line[128];
-    char  str[8];
     const int num_of_vertexs = graph->m_num_of_vertexs;
-
     int v = -1;
+    char line[128];
+    char str[8];
     for (v = 0; v < num_of_vertexs; ++v) {
         vertex_t* source = graph->m_vertexs[v];
-        edge_t*   edge = NULL;
+        edge_t* edge = NULL;
         for (edge = source->m_first_edge; edge != NULL; edge = edge->m_next) {
             strcpy(line, "Net: ");
             strcat(line, edge->m_name);
             strcat(line, ", ");
-
-            /*source vertex's arrival_time*/
+            /* source vertex's arrival_time */
             strcat(line, edge->m_source->m_name);
-            strcat(line, " arr_time:");
+            strcat(line, " arr_time: ");
             sprintf(str, "%f", edge->m_source->m_arrival_time);
             strcat(line, str);
 
-            /*sinkvertex'srequired_time*/
+            /* sink vertex's required_time */
             strcat(line, ", ");
             strcat(line, edge->m_sink->m_name);
-            strcat(line, " req_time:");
+            strcat(line, " req_time: ");
             sprintf(str, "%f", edge->m_sink->m_required_time);
             strcat(line, str);
 
@@ -398,57 +380,28 @@ void print_all_nets_weight(const timing_analyze_graph* graph)
         }
     }
     fclose(output_file);
-} /* end of void print_all_nets_weight(graph) */
+}
 
-vertex_level_t* init_a_vertex_level(vertex_t* vertexs[gmax_size],
-                                    const int num_of_vertexs,
-                                    const int level_num)
+vertex_level_t*  init_a_vertex_level(const int num_of_vertexs,
+                                     const int level_num)
 {
     vertex_level_t* level = (vertex_level_t*)malloc(sizeof(vertex_level_t));
     level->m_num_of_vertexs = num_of_vertexs;
-    level->m_vertexs = (vertex_t**)malloc(num_of_vertexs*sizeof(vertex_t*));
-
-    int v = -1;
-    for (v = 0; v < num_of_vertexs; ++v) {
-        level->m_vertexs[v] = vertexs[v];
-    }
+    level->m_vertexs = (vertex_t**)malloc(num_of_vertexs * sizeof(vertex_t*));
     level->m_level_num = level_num;
 
     return level;
 }
 
-void destroy_a_vertex_level(vertex_level_t* vertex_level)
+int  compare_pointer(const void* a,
+                     const void* b)
 {
-    free(vertex_level->m_vertexs);
-    vertex_level->m_vertexs = NULL;
-
-    free(vertex_level);
-    vertex_level = NULL;
-}
-
-int array_find_element(vertex_t* vertexs[gmax_size],
-                       const int  klength,
-                       const vertex_t*elem)
-{
-    assert(klength < gmax_size);
-
-    int loc = -1;
-    for (loc = 0; loc < klength; ++loc) {
-        if (vertexs[loc] == elem) {
-            break;
-        }
+    int return_val = -1;
+    if ((vertex_t*)a == (vertex_t*)b) {
+        return_val = 0;
+    } else {
+        return_val = 1;
     }
-    return loc;
-}
-
-void destroy_netlist_level(vertex_level_t** netlist_level,
-                           const int knum_of_levels)
-{
-    int l = -1;
-    for (l = 0; l < knum_of_levels; ++l) {
-        destroy_a_vertex_level(netlist_level[l]);
-    }
-    free(netlist_level);
-    netlist_level = NULL;
+    return return_val;
 }
 

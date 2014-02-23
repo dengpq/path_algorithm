@@ -1,6 +1,8 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+#include "global.h"
+
 typedef struct s_vertex_t {
     char      m_name[8];
     /* the following 4 variables were used for PATH algo */

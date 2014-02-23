@@ -95,12 +95,12 @@ void circuit_insert_net(input_circuit_info* circuit_info,
     net_info->m_delay = delay;
 
     circuit_info->m_input_nets[net_count] = net_info;
-    printf("Now insert Nets[%d]=%p, source=%d,sink=%d,delay=%d\n",
+    /*printf("Now insert Nets[%d]=%p, source=%d,sink=%d,delay=%d\n",
            net_count,
            circuit_info->m_input_nets[net_count],
            net_info->m_from,
            net_info->m_to,
-           net_info->m_delay);
+           net_info->m_delay);*/
 }
 
 void destroy_circuit_info(input_circuit_info* circuit_info)
@@ -120,7 +120,7 @@ void destroy_circuit_info(input_circuit_info* circuit_info)
     const int num_of_nets = circuit_info->m_num_of_nets;
     int e = 0;
     while (e < num_of_nets) {
-        printf("free input_nets[%d] = %p\n", e, circuit_info->m_input_nets[e]);
+        /* printf("free input_nets[%d] = %p\n", e, circuit_info->m_input_nets[e]); */
         free(circuit_info->m_input_nets[e]);
         circuit_info->m_input_nets[e] = NULL;
         ++e;
@@ -140,7 +140,6 @@ input_circuit_info* resolve_file(const char* input_file_name)
             const int kmax_len = 100;
             char a_line_string[kmax_len];
             fgets(a_line_string, kmax_len, fp);
-            printf("\n\na_line_string: %s\n", a_line_string);
             /* then resolve the charactors in a_line_string */
             bool_t find_net = resolve_a_line_string(a_line_string,
                                                    circuit_info,

@@ -11,23 +11,18 @@ timing_analyze_graph*  create_timing_analyze_graph(const input_circuit_info* cir
 
     timing_analyze_graph* graph = (timing_analyze_graph*)malloc(sizeof(timing_analyze_graph));
     assert(graph != NULL);
-    /* first insert vertexs */
+    /* first insert all vertexs */
     graph_insert_vertexs(circuit_info, graph);
     printf("graph insert all vertexs OK!\n");
 
-    /* then insert edge */
+    /* then insert all edges */
     const int num_of_nets = circuit_info->m_num_of_nets;
-    int e = 0;
-    while (e < num_of_nets) {
-        const int source = circuit_info->m_input_nets[e]->m_from;
-        const int sink = circuit_info->m_input_nets[e]->m_to;
-        const double delay = circuit_info->m_input_nets[e]->m_delay;
-        printf("source = %d,sink = %d,delay = %f,e = %d\n", source, sink, delay, e);
-        graph_insert_edge(source,
-                          sink,
-                          delay,
+    int e = -1;
+    for (e = 0; e < num_of_nets; ++e) {
+        graph_insert_edge(circuit_info->m_input_nets[e]->m_from,
+                          circuit_info->m_input_nets[e]->m_to,
+                          circuit_info->m_input_nets[e]->m_delay,
                           graph);
-        ++e;
     }
     printf("graph insert all edges OK!\n");
     return graph;
@@ -40,15 +35,15 @@ void graph_insert_vertexs(const input_circuit_info* circuit_info,
     const int num_of_vertexs = circuit_info->m_input_pins->m_num_of_pins;
     const int num_of_primary_inputs = circuit_info->m_input_pins->m_num_of_primary_inputs;
     const int num_of_primary_outputs = circuit_info->m_input_pins->m_num_of_primary_outputs;
+
     graph->m_num_of_vertexs = num_of_vertexs;
     graph->m_num_of_primary_inputs = num_of_primary_inputs;
     graph->m_num_of_primary_outputs = num_of_primary_outputs;
-
     graph->m_vertexs = (vertex_t**)malloc(num_of_vertexs * sizeof(vertex_t*));
     graph->m_primary_inputs = (vertex_t**)malloc(num_of_primary_inputs
                                                    * sizeof(vertex_t*));
-    graph->m_primary_output = (vertex_t**)malloc(num_of_primary_outputs
-                                                   * sizeof(vertex_t*));
+    graph->m_primary_outputs = (vertex_t**)malloc(num_of_primary_outputs
+                                                    * sizeof(vertex_t*));
     /* second insert vertexs into array */
     int v = -1;
     for (v = 0; v < num_of_vertexs; ++v) {
@@ -73,7 +68,7 @@ void graph_insert_vertexs(const input_circuit_info* circuit_info,
     }
     for (v = 0; v < num_of_primary_outputs; ++v) {
         serial_num = circuit_info->m_input_pins->m_primary_outputs[v];
-        graph->m_primary_output[v] = graph->m_vertexs[serial_num];
+        graph->m_primary_outputs[v] = graph->m_vertexs[serial_num];
     }
 } /* end of void graph_insert_vertexs() */
 
@@ -135,7 +130,6 @@ void graph_connect_edge_to_vertex(vertex_t* source,
     }
     /* Attention, it should increase sink vertex's indgree */
     ++(sink->m_indegree);
-    printf("Connect edge to vertex OK!\n");
 } /* end of void graph_connect_edge_to_vertex() */
 
 void destroy_timing_analyze_graph(timing_analyze_graph* graph)

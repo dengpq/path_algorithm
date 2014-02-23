@@ -13,7 +13,7 @@ typedef struct s_timing_analyze_graph {
     vertex_t**  m_vertexs;
     /* the 2 following arrays were used for topo-sort and path algorithm. */
     vertex_t**  m_primary_inputs;
-    vertex_t**  m_primary_output;
+    vertex_t**  m_primary_outputs;
 } timing_analyze_graph;
 
 timing_analyze_graph* create_timing_analyze_graph(const input_circuit_info* circuit_info);

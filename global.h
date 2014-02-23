@@ -6,7 +6,7 @@ typedef enum {
     ktrue
 } bool_t;
 
-static int gmax_size = 128;
+static int gmax_size = 256;
 
 #endif
 
